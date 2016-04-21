@@ -53,6 +53,7 @@ void checker_error (char const *s) {
 %token KW_BOOLEAN  "boolean"
 %token KW_STRING "String"
 %token CLASS    "class"
+%token THIS     "this"
 
 /* %left, %right, %nonassoc и %precedence управляют разрешением
    приоритета операторов и правил ассоциативности
@@ -76,12 +77,20 @@ variable : ID
 
 function_call : ID '(' expression_list ')'
 
+method_call : ID '.' function_call
+		| THIS '.' function_call
+		| new_expression '.' function_call
+
+new_expression : NEW function_call
+
 expression : constant | variable | '(' expression ')'
         | '!' expression
         | expression '<' expression | expression AND expression
         | expression '+' expression | expression '-' expression
         | expression '*' expression | expression '/' expression
         | function_call
+		| method_call
+		| new_expression
 
 expression_list : epsilon | expression | expression_list ',' expression
 

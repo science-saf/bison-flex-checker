@@ -48,6 +48,7 @@ main    return MAIN;
 class   return CLASS;
 extends return EXTENDS;
 new     return NEW;
+this    return THIS;
 int     return KW_INT;
 boolean return KW_BOOLEAN;
 String  return KW_STRING;

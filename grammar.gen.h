@@ -66,7 +66,8 @@ extern int checker_debug;
      KW_INT = 274,
      KW_BOOLEAN = 275,
      KW_STRING = 276,
-     CLASS = 277
+     CLASS = 277,
+     THIS = 278
    };
 #endif
 
