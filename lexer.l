@@ -13,6 +13,10 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 /* Опция, необходимая для языков с препроцессорами и #include, в нашем случае не нужна */
 %option noyywrap
 
+%option nounistd
+
+%option always-interactive
+
 %%
 
 "("     return '(';
@@ -29,9 +33,9 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 "{"     return '{';
 ";"     return ';';
 "}"     return '}';
-{BOOL}    return BOOL;
-{NUMBER}  return NUMBER;
-{STRING}  return STRING;
+{BOOL}   return BOOL;
+{NUMBER} return NUMBER;
+{STRING} return STRING;
 return  return RETURN;
 while   return WHILE;
 if      return IF;
@@ -45,7 +49,7 @@ class   return CLASS;
 extends return EXTENDS;
 new     return NEW;
 int     return KW_INT;
-boolean     return KW_BOOLEAN;
-String     return KW_STRING;
+boolean return KW_BOOLEAN;
+String  return KW_STRING;
 {ID}    return ID;
 [ \t\r\n]+  /* skip */
