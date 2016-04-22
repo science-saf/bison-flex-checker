@@ -54,6 +54,7 @@ void checker_error (char const *s) {
 %token KW_STRING "String"
 %token CLASS    "class"
 %token THIS     "this"
+%token LENGTH   "length"
 
 /* %left, %right, %nonassoc и %precedence управляют разрешением
    приоритета операторов и правил ассоциативности
@@ -82,12 +83,16 @@ method_call : ID '.' function_call
 		| new_expression '.' function_call
 
 new_expression : NEW function_call
+		| NEW KW_INT '[' expression ']'
 
 expression : constant | variable | '(' expression ')'
         | '!' expression
         | expression '<' expression | expression AND expression
         | expression '+' expression | expression '-' expression
         | expression '*' expression | expression '/' expression
+		| expression '.' LENGTH
+		| expression '[' expression ']'
+		| THIS
         | function_call
 		| method_call
 		| new_expression

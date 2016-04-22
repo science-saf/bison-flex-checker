@@ -1,0 +1,1 @@
+"Debug/bison-flex-checker.exe" < examples/e.java
