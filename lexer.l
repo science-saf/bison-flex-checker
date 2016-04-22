@@ -34,6 +34,7 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 ";"     return ';';
 "}"     return '}';
 "."     return '.';
+","     return ',';
 {BOOL}   return BOOL;
 {NUMBER} return NUMBER;
 {STRING} return STRING;
@@ -41,6 +42,7 @@ return  return RETURN;
 while   return WHILE;
 if      return IF;
 else    return ELSE;
+length  return LENGTH;
 "System.out.println"   return PRINT;
 public  return PUBLIC;
 static  return STATIC;

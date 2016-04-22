@@ -78,40 +78,49 @@ variable : ID
 
 function_call : ID '(' expression_list ')'
 
-method_call : ID '.' function_call
-		| THIS '.' function_call
-		| new_expression '.' function_call
+method_call : expression '.' function_call | method_call '.' function_call
 
-new_expression : NEW function_call
-		| NEW KW_INT '[' expression ']'
+field_access : expression '.' LENGTH | method_call
+
+new_expression : NEW function_call | NEW KW_INT '[' expression ']'
+
+new_statement : new_expression '.' function_call | new_statement '.' function_call
 
 expression : constant | variable | '(' expression ')'
         | '!' expression
         | expression '<' expression | expression AND expression
         | expression '+' expression | expression '-' expression
         | expression '*' expression | expression '/' expression
-		| expression '.' LENGTH
 		| expression '[' expression ']'
 		| THIS
         | function_call
-		| method_call
+		| field_access
 		| new_expression
 
 expression_list : epsilon | expression | expression_list ',' expression
 
+while_head : WHILE '(' expression ')'
+
+while_body : statement_line | block
+
+while_statement : while_head while_body | while_head ';'
+
+if_statement : IF '(' expression ')' statement ELSE statement
+
 statement : PRINT '(' expression ')'
           | variable '=' expression
           | variable '[' expression ']' '=' expression
-          | IF '(' expression ')' statement ELSE statement
-          | WHILE '(' expression ')' statement
+		  | new_statement
           | block
 
-statement_line : error ';' | statement ';'
+statement_line : error ';' 
+		| statement ';'
+		| while_statement
+		| if_statement
 
 statement_list : statement_line | statement_list statement_line
 
-block : '{' statement_list '}'
-        | '{''}'
+block : '{' statement_list '}' | '{''}'
 
 type : KW_INT '[' ']'
         | KW_BOOLEAN
@@ -122,7 +131,18 @@ parameter_list : type variable | parameter_list ',' type variable
 
 method_list : method_declaration | method_list method_declaration
 
-method_declaration : PUBLIC type ID '(' parameter_list ')' '{' variable_decl statement_list RETURN expression ';' '}'
+method_head : PUBLIC type ID '(' parameter_list ')'
+		| PUBLIC type ID '(' epsilon ')'
+
+method_body_inner_non_empty : variable_decl statement_list
+		| variable_decl
+		| statement_list
+
+method_body_inner : epsilon | method_body_inner_non_empty
+
+method_body : '{' method_body_inner RETURN expression ';' '}'
+
+method_declaration : method_head method_body
 
 class_list_non_empty : class_declaration | class_list_non_empty class_declaration
 
