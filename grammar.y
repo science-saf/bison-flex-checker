@@ -65,6 +65,8 @@ void checker_error (char const *s) {
 %left '+' '-'
 %left '*' '/'
 %right '=' '!'
+%nonassoc '['
+%left '.'
 
 %% /* Грамматические правила */
 
@@ -78,13 +80,11 @@ variable : ID
 
 function_call : ID '(' expression_list ')'
 
-method_call : expression '.' function_call | method_call '.' function_call
+method_call : expression '.' function_call
 
-field_access : expression '.' LENGTH | method_call
+length_access : expression '.' LENGTH
 
 new_expression : NEW function_call | NEW KW_INT '[' expression ']'
-
-new_statement : new_expression '.' function_call | new_statement '.' function_call
 
 expression : constant | variable | '(' expression ')'
         | '!' expression
@@ -94,7 +94,8 @@ expression : constant | variable | '(' expression ')'
 		| expression '[' expression ']'
 		| THIS
         | function_call
-		| field_access
+		| length_access
+		| method_call
 		| new_expression
 
 expression_list : epsilon | expression | expression_list ',' expression
@@ -110,10 +111,9 @@ if_statement : IF '(' expression ')' statement ELSE statement
 statement : PRINT '(' expression ')'
           | variable '=' expression
           | variable '[' expression ']' '=' expression
-		  | new_statement
           | block
 
-statement_line : error ';' 
+statement_line : error ';'
 		| statement ';'
 		| while_statement
 		| if_statement
