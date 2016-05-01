@@ -86,12 +86,14 @@ length_access : expression '.' LENGTH
 
 new_expression : NEW function_call | NEW KW_INT '[' expression ']'
 
+array_element_access : expression '[' expression ']'
+
 expression : constant | variable | '(' expression ')'
         | '!' expression
         | expression '<' expression | expression AND expression
         | expression '+' expression | expression '-' expression
         | expression '*' expression | expression '/' expression
-		| expression '[' expression ']'
+		| array_element_access
 		| THIS
         | function_call
 		| length_access
@@ -110,13 +112,15 @@ if_statement : IF '(' expression ')' statement ELSE statement
 
 statement : PRINT '(' expression ')'
           | variable '=' expression
-          | variable '[' expression ']' '=' expression
+          | array_element_access '=' expression
           | block
 
 statement_line : error ';'
 		| statement ';'
 		| while_statement
 		| if_statement
+		| function_call ';'
+		| method_call ';'
 
 statement_list : statement_line | statement_list statement_line
 
